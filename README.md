@@ -2,6 +2,10 @@
 
 Search over 1 million recipes with forkify. A trusty app for home-cooks, professional cooks, and even to chefs. Credits to Jonas Schmedtmann's Javascript course.
 
+# How to run
+
+Open your terminal(command line) and type "npm run start"
+
 # How to use
 
 Simply type in the search bar the recipe you want, click search and voilà.
