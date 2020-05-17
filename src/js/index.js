@@ -21,8 +21,7 @@ const state = {};
  */
 const controlSearch = async () => {
   //1. Get the query from view
-  //const query = searchView.getInput();
-  const query = "pizza";
+  const query = searchView.getInput();
 
   if (query) {
     //2. New Search object and add to state
@@ -94,10 +93,8 @@ const controlRecipe = async () => {
       state.recipe.calcServings();
 
       //6. Render recipe
-      //console.log(state.recipe);
       clearLoader();
-      //recipeView.renderRecipe(state.recipe, state.likes.isLiked(id)); //Fix later
-      recipeView.renderRecipe(state.recipe);
+      recipeView.renderRecipe(state.recipe, state.likes.isLiked(id));
     } catch (error) {
       console.log(error);
       alert("Error processing recipe");
@@ -110,6 +107,7 @@ const controlRecipe = async () => {
 ["hashchange", "load"].forEach((event) =>
   window.addEventListener(event, controlRecipe)
 );
+window.addEventListener("load", recipeView.clearRecipe);
 
 /**
  *  LIST CONTROLLER
@@ -187,6 +185,22 @@ const controlLike = () => {
   likesView.toggleLikeMenu(state.likes.getNumLikes());
 };
 
+//Restore liked recipe when page load
+window.addEventListener("load", () => {
+  state.likes = new Likes();
+
+  //Restore likes
+  state.likes.readStorage();
+
+  //Toggle like menu button
+  likesView.toggleLikeMenu(state.likes.getNumLikes());
+
+  //Render existing likes
+  state.likes.likes.forEach((like) => {
+    likesView.renderLike(like);
+  });
+});
+
 //Handling recipe button clicks
 elements.recipe.addEventListener("click", (e) => {
   if (e.target.matches(".btn-decrease, .btn-decrease *")) {
@@ -209,7 +223,7 @@ elements.recipe.addEventListener("click", (e) => {
 });
 
 //TESTING
-window.addEventListener("load", (e) => {
-  e.preventDefault();
-  controlSearch();
-});
+// window.addEventListener("load", (e) => {
+//   e.preventDefault();
+//   controlSearch();
+// });
